@@ -1,0 +1,2562 @@
+<!--References-->
+<!--https://www.d3-graph-gallery.com/graph/barplot_basic.html
+https://www.d3-graph-gallery.com/graph/wordcloud_size.html
+https://www.d3-graph-gallery.com/graph/donut_basic.html
+https://www.d3-graph-gallery.com/graph/line_select.html
+https://www.d3-graph-gallery.com/graph/shape.html-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Project</title>
+    
+    <!--Bootstrap import links-->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    
+    <!--link for Google font import-->
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300&display=swap" rel="stylesheet">
+	
+	<!-- Load d3.js -->
+	<script src="https://d3js.org/d3.v4.js"></script>
+	
+	<!-- Load d3-cloud -->
+	<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+    
+    <!-- Color Scale -->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    
+       <style>
+           
+        hr { 
+            display: block; 
+            height: 1px;
+            border: 0; 
+            border-top: 2px solid #ccc;
+            margin: 1em 0; padding: 0; 
+       }
+        #my_dataviz3 {
+            margin: 0 auto;
+        }
+        
+       .nav>li>a:focus, .nav>li>a:hover {
+           background-color: red;
+       }
+           .navbar-header:hover:{
+               background-color: azure;
+           }
+    
+    div.tooltip {	
+        position: absolute;			
+        text-align: center;			
+        width: auto;					
+        height: auto;					
+        padding: 2px;				
+        font: 12px sans-serif;		
+        background: red;
+        color:white;
+        border: 0px;		
+        border-radius: 8px;			
+        pointer-events: none;			
+    }
+           
+    .mybutton{
+        width : 90px;
+        transition: 2s;
+        color:azure
+    }
+           
+    html {
+        scroll-behavior: smooth;
+    }
+           
+    </style>
+	
+</head>
+
+<body style="background-color:#DCDCDC ; font-family: 'Titillium Web', sans-serif;">
+
+    <nav class="navbar" style="background: black; border-radius: 0">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" style = "color:red" href="#" onClick="window.location.reload();">Crime In India</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="active" role="presentation"><a href="#by_states" style = "color:azure">State</a></li>
+                    <li role="presentation"><a href="#by_year" style = "color:azure">Year</a></li>
+                    <li role="presentation"><a href="#crime_type" style = "color:azure">IPC Crime</a></li>
+                    <li role="presentation"><a href="#rel_pov_lit" style = "color:azure">Findings</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div>
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz1"></div>
+    
+    <div style = "padding-left:80px; padding-right:80px; ">
+    
+    <hr id="section_1">
+        
+    <div class="container-fluid"  style = "margin-bottom:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:20px;">
+                            <b>Crimes in India</b>
+                        </h3> 
+                        <p style ="padding:20px;">
+                            In India it is not uncommon these days to find news of a Theft or Riots on TV, social media or newspaper. Everyday a different type of crime is reported in the news. These news cases reported are from  different state and district of India. <br>
+                            As the news of criminal activities have become a prominent feature in the daily, it demands a deeper investigation. Due to advancement in technology, it is possible today to have data of crimes for past years. 
+                            <br><br>In this report I have considered data of crimes committed in different districts of India from year 2001 to 2011. It is interesting to know what are the types of crimes that take place in every state of a country and which of the state is the most dangerous. Does higher Literacy rate ensure fewer criminal activities ? Is poverty one of the factor behind crimes in India ?
+                            <br><br>Lets dig deep into the dataset and find answer to these questions.
+                            <br><br><b>Theft</b> is the most common type of crime reported in India from year 2001 to 2012. According to the Indian Penal Code (IPC),Theft is defined as : <i>"IPC Section 378 - A person steals if he dishonestly appropriates property belonging to another with the intention of permanently depriving the other of it."</i>
+                            <br><br><b>Top 10 crimes in India</b>
+                        </p>
+                        
+                    <ol>
+						<li class="list-item">
+							Theft
+						</li>
+						<li class="list-item">
+							Hurt/Grevious Hurt
+						</li>
+						<li class="list-item">
+							Other theft
+						</li>
+						<li class="list-item">
+							Auto theft
+						</li>
+						<li class="list-item">
+							Burglary
+						</li>
+						<li class="list-item">
+							Causing death by negligence 
+						</li>
+						<li class="list-item">
+							Cruelty by husband or relatives
+						</li>
+						<li class="list-item">
+							Cheating
+						</li>
+                        <li class="list-item">
+							Riots
+						</li>
+						<li class="list-item">
+							Assault on women with intent to outrage her modesty
+						</li>
+					</ol>
+                    </div>
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:95px;">
+                            <b>Total number of IPC cases from 2001 to 2012</b>
+                        </h3>
+                        <div id="my_dataviz2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        <hr>
+        
+    <div class="container-fluid" style = "margin-bottom:50px; margin-top:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:60px;">
+                            <b>Total number of IPC cases from 2001 to 2012</b>
+                        </h3>
+                        <div id="my_dataviz8"></div>
+                    </div>
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:20px;">
+                            <b>Trends in Criminal cases</b>
+                        </h3> 
+                        <p style ="padding:20px;">
+                            Overall there was an increase in number of Criminal cases by <b>26.49%.</b>
+                            <br><br>
+                            Criminal cases for Theft and Hurt/Grevious crime saw a significant increase in number. Number of cases for Theft was 233527 in 2001. The number of cases for Theft cases increased by 35% over the span of 12 years, ending with 315375 cases in year 2012. On the other hand cases for Hurt/Grevious hurt saw a increase of 22.67%, from 269476 cases in 2001.
+                            <br><br>
+                            One intresting trend that stands out is the decrease in the number of cases for Burglary. Cases for Burglary decreased by 7%, with only 91177 cases reported in 2012. Case of Murder alos saw a similar trend with a decease of  5%.
+                            <br><br>
+                            In year 2012, number of Auto theft was the highest with 139960 cases, which is a 150% increase in the number of cases.
+                            <br><br>
+                            Cases for Counterfieting, Dacoity, Importation of girls from foreign countries and Kidnapping had the least number of cases ranging between 1000 and 3000 cases.
+                            <br><br>
+                            Cases for Death by negligence, cruelty by husband or relatives, cheating and riots increased over the span of 12 years. 
+                            <br><br>
+                            There was a decrease in attempt to murder cases, until 2003 when the cases again began to rise and reached 34699 in 2012.
+                            <br><br>
+                        </p>
+                    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        <hr id= "crime_type">
+        
+    <div class="container-fluid"  style = "padding-bottom:70px; padding-top:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:20px;">
+                            <b>Trends in number of Criminal cases</b>
+                        </h3> 
+                        <h5 style ="padding-left:20px;">
+                            <b>Increasing trend</b>
+                        </h5>
+                        
+                    <ul style="font-size: 12px">
+						<li class="list-item">
+							ATTEMPT TO MURDER - 10.6%
+						</li>
+						<li class="list-item">
+							CULPABLE HOMICIDE NOT AMOUNTING TO MURDER - 6.6%
+
+						</li>
+						<li class="list-item">
+							RAPE - 35.19%
+
+						</li>
+						<li class="list-item">
+							OTHER RAPE - 35.20%
+
+						</li>
+						<li class="list-item">
+							KIDNAPPING AND ABDUCTION - 52.18%
+
+						</li>
+						<li class="list-item">
+							KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS - 62.11%
+
+						</li>
+						<li class="list-item">
+							KIDNAPPING AND ABDUCTION OF OTHERS - 4.54
+
+						</li>
+						<li class="list-item">
+							PREPARATION AND ASSEMBLY FOR DACOITY - 50.10%
+
+						</li>
+                        <li class="list-item">
+							ROBBERY - 27.90%
+
+						</li>
+						<li class="list-item">
+							THEFT - 25.96%
+
+						</li>
+                        <li class="list-item">
+							AUTO THEFT - 60.12%
+
+						</li>
+                        <li class="list-item">
+							CRIMINAL BREACH OF TRUST - 18.46%
+
+
+						</li>
+                        <li class="list-item">
+							CHEATING - 53.61%
+
+
+						</li>
+                        <li class="list-item">
+							COUNTERFIETING - 28.35%
+
+
+						</li>
+                        <li class="list-item">
+							ARSON - 10.90%
+						</li>
+                        <li class="list-item">
+							HURT/GREVIOUS HURT - 18.48%
+						</li>
+                        <li class="list-item">
+							DOWRY DEATHS - 16.80%
+
+						</li>
+                        <li class="list-item">
+							ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY - 24.65%
+
+						</li>
+                        <li class="list-item">
+							CRUELTY BY HUSBAND OR HIS RELATIVES - 53.09%
+
+						</li>
+                        <li class="list-item">
+							CAUSING DEATH BY NEGLIGENCE - 46.80%
+
+						</li>
+					</ul>
+                        
+                    <h5 style ="padding-left:20px;">
+                        <b>Decreasing trend</b>
+                    </h5>
+                        
+                    <ul style="font-size: 12px">
+						<li class="list-item">
+							MURDER - 5.13%
+						</li>
+						<li class="list-item">
+							DACOITY - 42.46%
+
+						</li>
+						<li class="list-item">
+							BURGLARY - 7.65%
+
+						</li>
+						<li class="list-item">
+							RIOTS - 2.01%
+
+						</li>
+                        <li class="list-item">
+							INSULT TO MODESTY OF WOMEN - 7.7%
+
+						</li>
+                        <li class="list-item">
+							IMPORTATION OF GIRLS FROM FOREIGN COUNTRIES - 93.22%
+
+						</li>
+                    </ul>
+                    
+                    </div>
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:110px;">
+                            <b>IPC cases from year 2001 to 2012</b>
+                        </h3>
+                        <span style="padding-left:110px;"><select id="selectButton" ></select></span>
+                        <div id="my_dataviz4"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        <hr style="margin-top:10px" >
+        
+    <div class="container-fluid" style = "margin-bottom:50px; margin-top:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:5px;">
+                            <b>Statewise number of Criminal Cases from 2001 to 2012</b>
+                        </h3>
+                        <div id="my_dataviz5"></div>
+                    </div>
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:17px;">
+                            <b>Crimes in Indian States/UT</b>
+                        </h3> 
+                        <p style="padding:20px;">
+                            Madhya Pradesh, Maharashtra, Tamil Nadu, Andra Pradesh and Uttar Pradesh were the top 5 states with criminal cases from year 2001 to 2012.
+                            <br><br>
+                            State of Madhya Pradesh saw the highest number of Criminal cases totalling <b>2413770.</b> Followed by Maharashtra, Tamil Nadu, Andra Pradesh and  Uttar Pradesh having 2273436, 2060176, 2018981 and 1858074 cases respectively. Cases in Rajasthan were close to that of Uttar Pradesh having 1855916 cases.
+                            <br><br>
+                            State of Karnataka, Kerala, Gujarat, Bihar and West Bengal have cases in range of 1500000 and 1000000. Amongst these Karnataka have the hishest cases with 1481063 cases.
+                            <br><br>
+                            Delhi, capital of India has as many cases as the state of Bihar, with a total of 1266348 cases.
+                            <br><br>
+                            Odisha, Assam, Haryana and Chattisgarh has 647946, 597764, 595303 and 561027 cases respectively.
+                            <br><br>
+                            The 7 sisters states of India, namely Arunachal Pradesh, Assam, Meghalaya, Manipur, Mizoram, Nagaland and Tripura, have cases between 52000 and 7000, with the exception of Assam which had 597764 cases. Amongst these sister states, Tripura had the highest cases totalling 52734 cases.
+                             <br><br>
+                            Union terriority of Dadra and Nagar Haveli, Daman and Diu, Lakshadweep had the lowest cases with 4651, 2948 and 743 cases respectively. 
+                             <br><br>
+                        </p>
+                        
+                    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <hr id="by_states">
+        
+        <div class="container-fluid"  style = "padding-bottom:50px; padding-top:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:20px;">
+                            <b>Crimes in India</b>
+                        </h3> 
+                        <div class="row">
+					   <p style ="padding-left:40px;">Following are the % increase/decrease in the number of cases for each state.</p>
+						<div class="col-md-4">
+						<ul style="font-size: 12px">
+						<li class="list-item">
+							ANDHRA PRADESH - 32.42%
+						</li>
+						<li class="list-item">
+							ARUNACHAL PRADESH - 3.22%
+
+						</li>
+						<li class="list-item">
+							ASSAM - 52.52%
+
+						</li>
+						<li class="list-item">
+							BIHAR - 39.68%
+
+						</li>
+						<li class="list-item">
+							CHHATTISGARH - 29.55%
+
+						</li>
+						<li class="list-item">
+							GOA - 35.11%
+
+						</li>
+						<li class="list-item">
+							GUJARAT - 20.52%
+
+						</li>
+						<li class="list-item">
+							HARYANA - 37.96%
+
+						</li>
+                        <li class="list-item">
+							HIMACHAL PRADESH - 8.42%
+
+						</li>
+						<li class="list-item">
+							JAMMU AND KASHMIR - 20.73%
+
+						</li>
+                        <li class="list-item">
+							JHARKHAND - 37.85%
+
+						</li>
+                        <li class="list-item">
+							KARNATAKA - 18.59%
+
+
+						</li>
+                        <li class="list-item">
+							KERALA - 34.68%
+
+
+						</li>
+                            <li class="list-item">
+                            MADHYA PRADESH - 17.51%
+
+
+                        </li>
+                            <li class="list-item">
+                                MAHARASHTRA - 15.52%
+                            </li>
+						</ul>
+						</div>
+						
+						<div class="col-md-6">
+						<ul style="font-size: 12px">
+                            
+                            <li class="list-item">
+                                MANIPUR - 33.39%
+                            </li>
+                            <li class="list-item">
+                                MEGHALAYA - 34.02%
+
+                            </li>
+                            <li class="list-item">
+                                MIZORAM - 27.18% (Decrease)
+
+                            </li>
+                            <li class="list-item">
+                                NAGALAND - 13.21% (Decrease)
+
+                            </li>
+                            <li class="list-item">
+                                ODISHA - 31.33%
+
+                            </li>
+                                                    <li class="list-item">
+                                PUDUCHERRY - 4.97%
+
+                            </li>
+                                                    <li class="list-item">
+                                PUNJAB - 22.39%
+
+                            </li>
+                                                    <li class="list-item">
+                                RAJASTHAN - 9.22%
+
+                            </li>
+                            <li class="list-item">
+                                SIKKIM - 15.90%
+
+                            </li>
+                            <li class="list-item">
+                                TAMIL NADU - 22.78%
+
+                            </li>
+                            <li class="list-item">
+                                TRIPURA - 55.28%
+
+                            </li>
+                            <li class="list-item">
+                                UTTAR PRADESH - 10.07%
+
+                            </li>
+                                                        <li class="list-item">
+                                UTTARAKHAND - 9.10%
+
+                            </li>
+                                                        <li class="list-item">
+                                WEST BENGAL - 61.86%
+
+                            </li>
+						</ul>
+						</div>
+						
+					   </div>
+                        <div class="row">
+					   
+                        <h5 style ="padding-left:40px;">
+                            <b>Union Territories</b>
+                        </h5>
+                            
+							<div class="col-md-6">
+							<ul style="font-size: 12px">
+								<li class="list-item">
+									ANDAMAN AND NICOBAR ISLANDS - 3.66%
+								</li>
+								<li class="list-item">
+									CHANDIGARH - 5.80%
+								</li>
+								<li class="list-item">
+									DADRA AND NAGAR HAVELI - 10.06% (Decrease)
+
+								</li>
+								<li class="list-item">
+									DAMAN AND DIU - 0%
+
+								</li>
+								<li class="list-item">
+									DELHI - 0.17%
+
+								</li>
+								<li class="list-item">
+									LAKSHADWEEP - 40%
+								</li>
+								<li class="list-item">
+									PUCHUCHERRY - 4.97%
+
+								</li>
+							</ul>
+							</div>
+						
+					   </div>
+                    
+                    </div>
+                    
+                                       <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:140px;">
+                            <b>IPC cases from year 2001 to 2012</b>
+                        </h3>
+                        <span style="padding-left:225px;"><select id="selectButton9"></select></span>
+                        <div id="my_dataviz9"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        
+        <hr style="margin-top:50px">
+        
+    <div class="container-fluid" id="by_year" style="margin-bottom:50px; margin-top:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6" style ="padding:20px;">
+                                <div style ="padding-left:60px;">
+                                    <h3>
+                                        <b>IPC crimes for year 2001 to 2012</b>
+                                    </h3>
+                                        <div>
+                                            <button value = "2001" onclick="update(data2001,this.value)">2001</button>
+                                            <button value = "2002" onclick="update(data2002,this.value)">2002</button>
+                                            <button value = "2003" onclick="update(data2003,this.value)">2003</button>
+                                            <button value = "2004" onclick="update(data2004,this.value)">2004</button>
+                                            <button value = "2005" onclick="update(data2005,this.value)">2005</button>
+                                            <button value = "2006" onclick="update(data2006,this.value)">2006</button>
+                                        </div>
+                                        <div>
+                                            <button value = "2007" onclick="update(data2007,this.value)">2007</button>
+                                            <button value = "2008" onclick="update(data2008,this.value)">2008</button>
+                                            <button value = "2009" onclick="update(data2009,this.value)">2009</button>
+                                            <button value = "2010" onclick="update(data2010,this.value)">2010</button>
+                                            <button value = "2011" onclick="update(data2011,this.value)">2011</button>
+                                            <button value = "2012" onclick="update(data2012,this.value)">2012</button>
+                                        </div>
+                                </div>
+                            <div id="my_dataviz6"></div>
+                        </div>
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3>
+                            <b></b>
+                        </h3> 
+                       <!-- <p style="padding:20px;">-->
+                        
+                        <h3 > <b id = "selected_year">Year</b></h3>
+                        
+                        <ul style="font-size: 12px">
+                            
+                            <li class="list-item" id = "MURDER"></li>
+                            <li class="list-item" id = "ATTEMPT TO MURDER"></li>
+                            <li class="list-item" id = "CULPABLE HOMICIDE NOT AMOUNTING TO MURDER"></li>
+                            <li class="list-item" id = "RAPE"></li>
+                            <li class="list-item" id = "CUSTODIAL RAPE"></li>
+                            <li class="list-item" id = "OTHER RAPE"></li>
+                            <li class="list-item" id = "KIDNAPPING & ABDUCTION"></li>
+                            <li class="list-item" id = "KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS"></li>
+                            <li class="list-item" id = "KIDNAPPING AND ABDUCTION OF OTHERS"></li>
+                            <li class="list-item" id = "DACOITY"></li>
+                            <li class="list-item" id = "PREPARATION AND ASSEMBLY FOR DACOITY"></li>
+                            
+                            <li class="list-item" id = "ROBBERY"></li>
+                            <li class="list-item" id = "BURGLARY"></li>
+                            <li class="list-item" id = "THEFT"></li>
+                            
+                            <li class="list-item" id = "AUTO THEFT"></li>
+                            <li class="list-item" id = "OTHER THEFT"></li>
+                            <li class="list-item" id = "RIOTS"></li>
+                            <li class="list-item" id = "CRIMINAL BREACH OF TRUST"></li>
+                            <li class="list-item" id = "CHEATING"></li>
+                            
+                            <li class="list-item" id = "COUNTERFIETING"></li>
+                            <li class="list-item" id = "ARSON"></li>
+                            <li class="list-item" id = "GREVIOUS"></li>
+                            <li class="list-item" id = "DOWRY DEATHS"></li>
+                            <li class="list-item" id = "ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY"></li>
+                            <li class="list-item" id = "INSULT TO MODESTY OF WOMEN"></li>
+                            <li class="list-item" id = "CRUELTY BY HUSBAND OR HIS RELATIVES"></li>
+                            <li class="list-item" id = "IMPORTATION OF GIRLS FROM FOREIGN COUNTRIES"></li>
+                            <li class="list-item" id = "CAUSING DEATH BY NEGLIGENCE"></li>
+
+                            
+						</ul>
+                        
+                        
+                    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <hr id="rel_pov_lit">
+    
+    <div class="container-fluid"  style="margin-bottom:50px; margin-top:50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:20px;">
+                            <b>How does Poverty and Illiteracy affect crimes ?</b>
+                        </h3> 
+                        <p style="padding:20px;">
+                            One ot the proposed question for this study was to find a relation between Criminal activities in States of India and the overall Literacy rate and poverty rate of a state.
+                            <br><br>
+                            It can be observed that having a high Literacy in a state does not ensures less crime cases. For instance in the state of Kerala, which has the highest Literacy rate in Inida for year 2011, the number of cases are 344274. Similarly, the state of Maharashtra and Tamil Nadu also has high cases with 409804 and 385758 cases respectively. One reason that justifies these numberes is the high populaion density in these states. 
+                            <br><br>
+                            Also, poverty is another factor for high number of cases in the states of Bihar, Chattisgarh, Uttar Pradesh and Madhya pradesh with a poverty rate of 53.5%, 48.7%, 37.7% and 36.7% respectively and 271792, 114436, 390270 and 434188 cases respectively. 
+                            <br><br>
+                            Some states with low poverty rate show less number of cases. For instance Jammu & Kashmir, Himachal Pradesh, Goa, Punjab, Meghalaya and Uttarakhand having 49008, 28624, 6898, 69766, 5510 and 17548 respectively
+                            <br><br>
+                            Amongst the 7 sister states; Mizoram, Nagaland , Meghalaya and Tripura have high litercy and has less number of Crime cases.
+                            <br><br>
+                            Union terriorities of Andaman & Nicobar islands, Puducherry and Lakshwadeep Islands have low cases and high Litearcy rates, showing a inverse relationship between Literacy and Crime cases.
+                        </p>
+                    
+                    </div>
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:50px;">
+                            <b>Poverty Literacy and Crime data for 2011</b>
+                        </h3>
+                        <div id="my_dataviz7"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        
+        <hr style ="padding-bottom:10px;">
+        
+    <div class="container-fluid" style ="padding-bottom:80px; padding-top:50px">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:70px;">
+                            <b>IPC cases for Districts in 2011</b>
+                        </h3>
+                        <div id="my_dataviz11"></div>
+                    </div>
+                    
+                    
+                    <div class="col-md-6" style ="padding:20px;">
+                        <h3 style ="padding-left:20px;">
+                            <b>Which districts in India have highest criminal activity ?</b>
+                        </h3> 
+                        <p style="padding:20px;">
+                            The district of Bilaspur in the state of Chattisgarh had the highest Crime rate in India in year 2011.
+                            <br><br>
+                            Delhi, the capital of India stood second in terms of Crime rate having a crime rate of 831 per 100,000 person.
+                            <br><br>
+                            Banglore, the cyber city of India had the most number of Criminal cases for year 2011 totalling 35198.
+                            <br><br>
+                            Mumbai, the Financial capital of India had the second highest number of cases totalling 35118. 
+                            <br><br>
+                            Other metropolitian cities of India also had high criminal cases.
+                            <br><br>
+                            Ahmadabad, capital of the state of Gujarat, Jaipur the capital of Rajasthan also known as the Pink city, had high cases ( 23891 and 24102 ).  
+                            <br><br>
+                            Chennai, a famous city in southern part of India, had 21861 cases. Indore, a city located in the geographical centre of India had 18915 cases. 
+                            <br><br>
+                            Almost vast majority of districts in India had recorded cases in range of 40 and 10,000. 
+                        </p>
+                    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        
+</div>
+</div>
+    
+    
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    
+    <script>
+
+        
+        //-------------------wordcloud------------------
+	// List of words
+	var myWords = [
+			{word: "THEFT", size: "3732076"}, 
+			{word: "GREVIOUS HURT", size: "3394086"}, 
+			{word: "OTHER THEFT", size: "2334689"}, 
+			{word: "AUTO THEFT", size: "1397387"}, 
+			{word: "BURGLARY", size: "1140894"}, 
+			{word: "CAUSING DEATH BY NEGLIGENCE", size: "1009367"},
+			{word: "CRUELTY BY HUSBAND OR HIS RELATIVES", size: "890412"},
+			{word: "CHEATING", size: "793725"},
+			{word: "RIOTS", size: "775923"},
+			{word: "ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY", size: "460689"},
+			{word: "MURDER", size: "408748"},
+            {word: "KIDNAPPING & ABDUCTION", size: "381940"},
+            {word: "ATTEMPT TO MURDER", size: "357254"},
+            {word: "RAPE", size: "245561"},
+            {word: "KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS", size: "279557"},
+            {word: "ROBBERY", size: "254728"},
+            {word: "CRIMINAL BREACH OF TRUST", size: "188746"},
+            {word: "INSULT TO MODESTY OF WOMEN", size: "125741"},
+            {word: "ARSON", size: "114268"},
+            {word: "DOWRY DEATHS", size: "92784"},
+            {word: "DACOITY", size: "59790"},
+            {word: "COUNTERFIETING", size: "27238"}
+        
+	]
+
+	// set the dimensions and margins of the graph
+	var margin = {top: 10, right: 10, bottom: 10, left: 10},
+		width = screen.width - 40 - margin.left - margin.right,
+		height = screen.height - 200 - margin.top - margin.bottom;
+
+	// append the svg object to the body of the page
+	var svg = d3.select("#my_dataviz1").append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+		.attr("transform",
+			  "translate(" + margin.left + "," + margin.top + ")");
+		
+	// Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
+	// Wordcloud features that are different from one word to the other must be here
+	var layout = d3.layout.cloud()
+	  .size([width, height])
+	  .words(myWords.map(function(d) { return {text: d.word, size:d.size}; }))
+	  .padding(1)        //space between words
+	  .rotate(function() { return ~~(Math.random() * 2) * 90; })
+	  .fontSize(function(d) { return d.size/20000; })      // font size of words
+	  .on("end", draw);
+	layout.start();
+        
+        
+        
+        //https://www.d3-graph-gallery.com/graph/shape.html
+        
+        // create data
+var data = [{x: (width/2)-10, y: height-20}, {x: (width/2)+10, y: height - 10}, {x: (width/2)+30, y: height-20}]
+
+// prepare a helper function
+var lineFunc = d3.line()
+  .x(function(d) { return d.x })
+  .y(function(d) { return d.y })
+
+// Add the path using this helper function
+svg.append("a")
+    .attr("xlink:href", "#section_1")
+    .append('path')
+  .attr('d', lineFunc(data))
+  .attr('stroke', 'black')
+  .attr('fill', 'none')
+    .attr("stroke-width",2);
+        
+        
+        
+        
+	// This function takes the output of 'layout' above and draw the words
+	// Wordcloud features that are THE SAME from one word to the other can be here
+	function draw(words) {
+	  svg
+		.append("g")
+		  .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+		  .selectAll("text")
+			.data(words)
+		  .enter().append("text")
+			.style("font-size", function(d) { return d.size; })
+			.style("fill",function(d){
+                    if (d.text == "THEFT")
+                        {return 'red';}
+                      else if(d.text == "AUTO THEFT")
+                                  {return 'red';}
+                } )
+			.attr("text-anchor", "middle")
+			.style("font-family", "Impact")
+			.attr("transform", function(d) {
+			  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+			})
+			.text(function(d) { return d.text; })
+            .on("mouseover", function(d) {		
+                div.transition()		
+                    .duration(200)		
+                    .style("opacity", .9);
+          
+                svg.selectAll("text").attr("opacity",0.2);
+          
+                d3.select(this).attr("opacity",0.9);
+          
+                //console.log(d);
+                //onsole.log(myWords);
+          
+                var no_cases = 0;
+          
+                for(i=0; i<myWords.length; i++)
+                {
+                    if(d.text == myWords[i].word)
+                    {no_cases=myWords[i].size;}
+                }
+                //console.log(no_cases);
+      
+                div	.html(d.text + "<br>" + "Cases : " + no_cases)	
+                    .style("left", (d3.event.pageX) + "px")		
+                    .style("top", (d3.event.pageY - 28) + "px");	
+                })					
+            .on("mouseout", function(d) {		
+                div.transition()		
+                    .duration(500)		
+                    .style("opacity", 0);	
+          
+            svg.selectAll("text").attr("opacity",1);
+            
+            });
+	}
+        
+        
+        //-----------bargraph------------------------------------------------------
+        
+        // set the dimensions and margins of the graph
+var margin = {top: 30, right: 200, bottom: 70, left: 100},
+    width = 600 - margin.left - margin.right,
+    height = 750 - margin.top - margin.bottom;
+        
+        	// append the svg object to the body of the page
+	var svg1 = d3.select("#my_dataviz2").append("svg")
+		.attr("width", width + 300)
+		.attr("height", height + 100)
+	  .append("g")
+		.attr("transform",
+			  "translate(" + margin.left + "," + margin.top + ")");
+        
+        
+        // Parse the Data
+d3.csv("total_of_crimes.csv", function(data) {
+
+// X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .domain(data.map(function(d) { return d.word; }))
+  .padding(0.2);
+svg1.append("g")
+  .attr("transform", "translate(0," + height  + ")")
+  .call(d3.axisBottom(x))
+  .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-90)")
+    .style("text-anchor", "end");
+
+// Add Y axis
+var y = d3.scaleLinear()
+  .domain([0, 4000000])
+  .range([ height, 0]);
+svg1.append("g")
+  .call(d3.axisLeft(y));
+    
+    
+    // x axis label - % poverty
+    svg1.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 470)
+    .attr("y", height + 20)
+    .text("IPC Crime");
+        
+// y axis label
+        
+    svg1.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-150)
+    .attr("y", -80)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Total no. of Cases");
+
+// Bars
+svg1.selectAll("mybar")
+  .data(data)
+  .enter()
+  .append("rect")
+    .attr("x", function(d) { return x(d.word); })
+    .attr("y", function(d) { return y(d.size); })
+    .attr("width", x.bandwidth())
+    .attr("height", function(d) { return height - y(d.size); })
+    .attr("fill", function(d){
+				if (d.word == "THEFT"){return 'red';}})
+    .on("mouseover", function(d) {		
+        div.transition()		
+            .duration(200)		
+            .style("opacity", .9);
+
+        div	.html(d.word + " <br> " + d.size)	
+            .style("left", (d3.event.pageX + 10) + "px")		
+            .style("top", (d3.event.pageY - 50) + "px");
+    
+        svg1.selectAll("rect").attr("opacity",0.2);
+        
+        d3.select(this).attr("opacity",1);
+        d3.select(this).attr("fill",'red');
+    
+        })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);
+        
+            svg1.selectAll("rect").attr("opacity",1);
+    
+            d3.select(this).attr("fill",'black');
+
+            if (d.word == "THEFT")
+            {
+                d3.select(this).attr("fill",'red');
+
+            }
+    
+    });
+    
+    
+
+})
+        
+        //---------------------several line graph-----------------------------
+        
+        // set the dimensions and margins of the graph
+var margin8 = {top: 10, right: 30, bottom: 30, left: 60},
+    width8 = 500 + 100 - margin8.left - margin8.right,
+    height8 = 480 - margin8.top - margin8.bottom;
+
+// append the svg object to the body of the page
+var svg8 = d3.select("#my_dataviz8")
+  .append("svg")
+    .attr("width", width8 + margin8.left + margin8.right)
+    .attr("height", height8 + margin8.top + margin8.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin8.left + "," + margin8.top + ")");
+    
+    svg8.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 300)
+    .attr("y", height8 + 30)
+    .style("font-size",10)
+    .text("Year");
+    
+    svg8.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-150)
+    .attr("y", -75)
+    .style("padding-right","10px")
+    .style("font-size",10)
+    .attr("dy", "2.2em")
+    .attr("transform", "rotate(-90)")
+    .text("Count of Cases");
+        
+        // Define the div for the tooltip
+    var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+
+
+//Read the data
+d3.csv("granulated_crime_type_year.csv", function(data) {
+
+  // group the data: I want to draw one line per group
+  var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+    .key(function(d) { return d.name;})
+    .entries(data);
+    
+// trying to group by year
+    
+      var sumstat2 = d3.nest() // nest function allows to group the calculation per level of a factor
+    .key(function(d) { return d.year;})
+    .entries(data);
+
+  // Add X axis --> it is a date format
+    //     .domain(d3.extent(data, function(d) { return d.year; }))
+    // adding a list of year as domain. So it becomes easy to get the corresponding crime values
+    // .domain([2001,2012])
+    
+    // previuos appraoch didnt work, adding new x sccale
+/*    var x2 = d3.scaleLinear()
+    .domain([2001,2012])
+    .range([2001,2012]);*/
+    
+  var x = d3.scaleLinear()
+    .domain([2001,2012])
+    .range([ 0, width8 ]);
+  svg8.append("g")
+    .attr("transform", "translate(0," + height8 + ")")
+    .call(d3.axisBottom(x).ticks(5));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 330577])
+    .range([ height8, 0 ]);
+  svg8.append("g")
+    .call(d3.axisLeft(y));
+
+  // color palette
+  var res = sumstat.map(function(d){ return d.key }) // list of group names
+  var color = d3.scaleOrdinal()
+    .domain(res)
+    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+
+  // Draw the line
+  svg8.selectAll(".line")
+      .data(sumstat)
+      .enter()
+      .append("path")
+        .attr("fill", "none")
+        .attr("stroke", function(d){ if(d.key == "HURT/GREVIOUS HURT" || d.key == "THEFT" || d.key == "OTHER THEFT"){return "red";} else {return "black" ;} })
+        .attr("stroke-width", 1.5)
+        .attr("d", function(d){
+          return d3.line()
+            .x(function(d) { return x(d.year); })
+            .y(function(d) { return y(+d.n); })
+            (d.values)
+        })
+        .on("mouseover", function(d,i) {		
+                div.transition()		
+                    .duration(200)		
+                    .style("opacity", .9);
+      
+/*            console.log(d);
+            console.log(data);
+            console.log(d.key);
+            console.log(this);
+            console.log(x.domain());
+            console.log(sumstat);
+            console.log(sumstat2);
+            console.log(x2(2001));*/
+      
+                div	.html(d.key)	
+                    .style("left", (d3.event.pageX) + "px")		
+                    .style("top", (d3.event.pageY - 28) + "px");	
+                })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+
+})
+        
+        
+        
+        //---------------------donut chart ----------------------------------
+        
+/*        
+        // set the dimensions and margins of the graph
+var width3 = 450
+    height3 = 450
+    margin3 = 40
+        
+        
+// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+var radius = Math.min(width3, height3) / 2 - margin3
+
+// append the svg object to the div called 'my_dataviz'
+var svg3 = d3.select("#my_dataviz3")
+  .append("svg")
+    .attr("width", width3 + 400)
+    .attr("height", height3+100)
+    .attr("transform",
+          "translate(" + 250 + "," + margin3 + ")")
+  .append("g")
+    .attr("transform", "translate(" + Number((window.width/2) + 260)  + "," + 220 + ")");
+        
+    var data = {
+        THEFT: 3732076, 
+        GREVIOUS_HURT : 3394086, 
+        OTHER_THEFT:2334689,
+        AUTO_THEFT:1397387,
+        BURGLARY:1140894,
+        CAUSING_DEATH_BY_NEGLIGENCE:1009367,
+        CRUELTY_BY_HUSBAND_OR_HIS_RELATIVES:890412,
+        CHEATING:793725,
+        RIOTS:775923,
+        ASSAULT_ON_WOMEN_WITH_INTENT_TO_OUTRAGE_HER_MODESTY:460689,
+        MURDER:408748
+    }
+    
+    // set the color scale
+var color = d3.scaleOrdinal()
+  .domain(data)
+  .range(["#ff0000", "#ff1500", "#ff2b00", "#ff4000", "#ff4000"])
+
+// Compute the position of each group on the pie:
+var pie = d3.pie()
+  .value(function(d) {return d.value; })
+
+var data_ready = pie(d3.entries(data))
+
+// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+// .attr('fill', function(d){ if(d.data.key=='THEFT'){return "black"}  else{return(color(d.data.key)) }})
+
+svg3
+  .selectAll('whatever')
+  .data(data_ready)
+  .enter()
+  .append('path')
+  .attr('d', d3.arc()
+    .innerRadius(50)         // This is the size of the donut hole
+    .outerRadius(radius)
+  )
+  .attr('fill', function(d){ if(d.data.key=='THEFT'){return "red"}  else{return "black" }})
+  .attr("stroke", "azure")
+  .style("stroke-width", "1px")
+  .style("opacity", 1)
+  .on("mouseover", function(d) {		
+                div.transition()		
+                    .duration(200)		
+                    .style("opacity", .9);
+      
+                div	.html(d.data.key + " : " + d.data.value)	
+                    .style("left", (d3.event.pageX) + "px")		
+                    .style("top", (d3.event.pageY - 28) + "px");	
+                })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+        */
+    //-------------------Line graph with drop down-----------
+        
+        // set the dimensions and margins of the graph
+var margin = {top: 10, right: 100, bottom: 30, left: 60},
+    width = 600 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
+        
+        // append the svg object to the body of the page
+var svg4 = d3.select("#my_dataviz4")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .attr("transform",
+          "translate(" + 50 + "," + margin.top + ")")
+        .append("g")
+            .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+        
+        
+//Read the data
+d3.csv("total_of_crimes_all_states_all_years.csv", function(data) {
+
+    // List of groups (here I have one group per column)
+
+    var allGroup = ['MURDER', 'ATTEMPT TO MURDER',
+       'CULPABLE HOMICIDE NOT AMOUNTING TO MURDER', 'RAPE', 'CUSTODIAL RAPE',
+       'OTHER RAPE', 'KIDNAPPING & ABDUCTION',
+       'KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS',
+       'KIDNAPPING AND ABDUCTION OF OTHERS', 'DACOITY',
+       'PREPARATION AND ASSEMBLY FOR DACOITY', 'ROBBERY', 'BURGLARY', 'THEFT',
+       'AUTO THEFT', 'OTHER THEFT', 'RIOTS', 'CRIMINAL BREACH OF TRUST',
+       'CHEATING', 'COUNTERFIETING', 'ARSON', 'HURT/GREVIOUS HURT',
+       'DOWRY DEATHS', 'ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY',
+       'INSULT TO MODESTY OF WOMEN', 'CRUELTY BY HUSBAND OR HIS RELATIVES',
+       'IMPORTATION OF GIRLS FROM FOREIGN COUNTRIES',
+       'CAUSING DEATH BY NEGLIGENCE', 'OTHER IPC CRIMES', 'TOTAL IPC CRIMES']
+    
+    // add the options to the button
+    d3.select("#selectButton")
+      .selectAll('myOptions')
+     	.data(allGroup)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    // A color scale: one color for each group
+    var myColor = d3.scaleOrdinal()
+      .domain(allGroup)
+      .range(d3.schemeSet2);
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleLinear()
+      .domain([2001,2012])
+      .range([ 0, width ]);
+    svg4.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain( [30000,36000])
+      .range([ height, 0 ]);
+    svg4.append("g")
+    .attr("class","y axis")
+      .call(d3.axisLeft(y));
+    
+    // x axis label 
+    svg4.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 230)
+    .attr("y", height + 35)
+    .text("Year");
+        
+    // y axis label
+        
+    svg4.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-100)
+    .attr("y", -60)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Total no. of Cases");
+    
+
+    // Initialize line with group a
+    var line = svg4
+      .append('g')
+      .append("path")
+        .datum(data)
+        .attr("d", d3.line()
+          .x(function(d) { return x(+d.time) })
+          .y(function(d) { return y(+d.MURDER) })
+        )
+        .attr("stroke", "red" )
+        .style("stroke-width", 4)
+        .style("fill", "none");
+
+    // A function that update the chart
+    function update(selectedGroup) {
+
+      // Create new data with the selection?
+      var dataFilter = data.map(function(d){return {time: d.time, value:d[selectedGroup]} })
+      
+      
+      var domainOfSelectedCrime = data.map(function(d){return d[selectedGroup] })
+
+      var maxDomainOfSelectedCrime = Math.max.apply(Math,domainOfSelectedCrime)
+      var minDomainOfSelectedCrime = Math.min.apply(Math,domainOfSelectedCrime)
+      
+      //console.log(maxDomainOfSelectedCrime);
+        
+    //console.log(maxDomainOfSelectedCrime);
+      
+      //console.log(selectedGroup);
+      
+      svg4.selectAll(".y.axis").remove();
+      
+      
+      // Add Y axis
+        var y = d3.scaleLinear()
+          .domain( [minDomainOfSelectedCrime - 1000, maxDomainOfSelectedCrime + 1000])
+          .range([ height, 0 ]);
+        svg4.append("g")
+        .attr("class","y axis")
+          .call(d3.axisLeft(y));
+      
+      
+      // Give these new data to update line
+      line
+          .datum(dataFilter)
+          .transition()
+          .duration(1000)
+          .attr("d", d3.line()
+            .x(function(d) { return x(+d.time) })
+            .y(function(d) { return y(+d.value) })
+          )
+          .attr("stroke", 
+               function(d){ 
+      
+          var group1 = ['MURDER', 'CULPABLE HOMICIDE NOT AMOUNTING TO MURDER','CUSTODIAL RAPE', 'KIDNAPPING & ABDUCTION','KIDNAPPING AND ABDUCTION OF OTHERS', 'DACOITY', 'ROBBERY', 
+                       'THEFT', 'OTHER THEFT', 'CRIMINAL BREACH OF TRUST','COUNTERFIETING', 'DOWRY DEATHS', 'INSULT TO MODESTY OF WOMEN', 'CRUELTY BY HUSBAND OR HIS RELATIVES', 'CAUSING DEATH BY NEGLIGENCE', 'OTHER IPC CRIMES', 'TOTAL IPC CRIMES' ]
+          
+          var group2 = ['ATTEMPT TO MURDER','RAPE','OTHER RAPE','KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS','PREPARATION AND ASSEMBLY FOR DACOITY', 
+                       'BURGLARY', 'AUTO THEFT', 'RIOTS', 'CHEATING', 'ARSON', 'HURT/GREVIOUS HURT', 'ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY',  'IMPORTATION OF GIRLS FROM FOREIGN COUNTRIES']
+          
+          
+          if(group1.includes(selectedGroup)){return "red"}
+          else{return "black"}
+      
+                }
+               
+        )
+    }
+
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(d) {
+        
+        
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update(selectedOption)
+    })
+
+})
+        
+        //-----------bargraph - for state total --------------------------------------
+        
+            // set the dimensions and margins of the graph
+    var margin = {top: 30, right: 40, bottom: 70, left: 70},
+        width = 700 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+                // append the svg object to the body of the page
+        var svg5 = d3.select("#my_dataviz5").append("svg")
+            .attr("width", width + 20)
+            .attr("height", height + 200 + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+
+            // Parse the Data
+    d3.csv("state_total_all_years.csv", function(data) {
+
+    // X axis
+    var x = d3.scaleBand()
+      .range([ 0, width ])
+      .domain(data.map(function(d) { return d.word; }))
+      .padding(0.2);
+        
+    svg5.append("g")
+      .attr("transform", "translate(0," + height  + ")")
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-90)")
+        .style("text-anchor", "end");
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([743, 2500000])
+      .range([ height, 0]);
+    svg5.append("g")
+      .call(d3.axisLeft(y));
+        
+        // x axis label 
+    svg5.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 450)
+    .attr("y", height + 15)
+    .text("State/UT");
+        
+// y axis label
+        
+    svg5.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-150)
+    .attr("y", -70)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Total no. of Cases");
+        
+
+    // Bars
+    svg5.selectAll("mybar")
+      .data(data)
+      .enter()
+      .append("rect")
+        .attr("x", function(d) { return x(d.word); })
+        .attr("y", function(d) { return y(d.size); })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) { return height - y(d.size); })
+        .attr("fill", function(d){
+                    if (d.word == "MADHYA PRADESH"){return 'red';}})
+        .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);
+
+            //console.log(d);
+
+            div	.html(d.word + " : " + d.size)	
+                .style("left", (d3.event.pageX + 10) + "px")		
+                .style("top", (d3.event.pageY - 50) + "px");
+        
+            svg5.selectAll("rect").attr("opacity",0.2);
+        
+            d3.select(this).attr("opacity",1);
+            d3.select(this).attr("fill",'red');
+        })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        
+            svg5.selectAll("rect").attr("opacity",1);
+    
+            d3.select(this).attr("fill",'black');
+
+            if (d.word == "MADHYA PRADESH")
+            {
+                d3.select(this).attr("fill",'red');
+
+            }
+        
+        });
+
+    })
+        
+    
+    //--------------------------- Bar Graph with buttons to select year -----------------------------------------
+        
+            // Data set for 2001
+    var data2001 = []; 
+    
+    // ------------------ year 2001 -------------------------
+    
+    d3.csv("year_2001_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2001.push(object_to_push);
+        }
+        
+        //console.log(data2001);
+        
+        // Initialize the plot with the first dataset
+        update(data2001)
+    });
+    
+    //------------------ year 2002 ----------------------------
+    
+    // Data set for 2002
+    var data2002 = []; 
+    
+        d3.csv("year_2002_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2002.push(object_to_push);
+        }
+        
+        //console.log(data2002);
+    });
+    
+    //------------------ year 2003 ----------------------------
+    
+    // Data set for 2003
+    var data2003 = []; 
+    
+        d3.csv("year_2003_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2003.push(object_to_push);
+        }
+        
+        //console.log(data2003);
+    });
+    
+        //------------------ year 2004 ----------------------------
+    
+    // Data set for 2004
+    var data2004 = []; 
+    
+        d3.csv("year_2004_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2004.push(object_to_push);
+        }
+        
+        //console.log(data2004);
+    });
+    
+        //------------------ year 2005 ----------------------------
+    
+    // Data set for 2005
+    var data2005 = []; 
+    
+        d3.csv("year_2005_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2005.push(object_to_push);
+        }
+        
+        //console.log(data2005);
+    });
+    
+        //------------------ year 2006 ----------------------------
+    
+    // Data set for 2006
+    var data2006 = []; 
+    
+        d3.csv("year_2006_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2006.push(object_to_push);
+        }
+        
+        //console.log(data2006);
+    });
+    
+        //------------------ year 2007 ----------------------------
+    
+    // Data set for 2007
+    var data2007 = []; 
+    
+        d3.csv("year_2007_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2007.push(object_to_push);
+        }
+        
+        //console.log(data2007);
+    });
+    
+    
+        //------------------ year 2008 ----------------------------
+    
+    // Data set for 2008
+    var data2008 = []; 
+    
+        d3.csv("year_2008_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2008.push(object_to_push);
+        }
+        
+        //console.log(data2008);
+    });
+    
+        //------------------ year 2009 ----------------------------
+    
+    // Data set for 2009
+    var data2009 = []; 
+    
+        d3.csv("year_2009_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2009.push(object_to_push);
+        }
+        
+        //console.log(data2009);
+    });
+    
+        //------------------ year 2010 ----------------------------
+    
+    // Data set for 2010
+    var data2010 = []; 
+    
+        d3.csv("year_2010_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2010.push(object_to_push);
+        }
+        
+       // console.log(data2010);
+    });
+    
+        //------------------ year 2011 ----------------------------
+    
+    // Data set for 2011
+    var data2011 = []; 
+    
+        d3.csv("year_2011_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2011.push(object_to_push);
+        }
+        
+       // console.log(data2011);
+    });
+    
+        //------------------ year 2012 ----------------------------
+    
+    // Data set for 2012
+    var data2012 = []; 
+    
+        d3.csv("year_2012_data.csv", function(data){
+        
+        for(i=0;i<data.length;i++){
+            
+            object_to_push = {}
+            
+            object_to_push.group = data[i].CRIME;
+            object_to_push.value = data[i].TOTAL;
+            
+            data2012.push(object_to_push);
+        }
+        
+        //console.log(data2012);
+    });
+    
+
+
+// set the dimensions and margins of the graph
+var margin = {top: 30, right: 30, bottom: 70, left: 80},
+    width = 510 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg6 = d3.select("#my_dataviz6")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right + 50)
+    .attr("height", height + 120 + margin.top + margin.bottom + 50)
+  .append("g")
+    .attr("transform",
+          "translate(" +Number(margin.left + 5)+ "," + margin.top + ")");
+
+    
+    
+// Initialize the X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .padding(0.2);
+var xAxis = svg6.append("g")
+  .attr("transform", "translate(0," + height + ")")
+
+// Initialize the Y axis
+var y = d3.scaleLinear()
+  .range([ height, 0]);
+var yAxis = svg6.append("g")
+  .attr("class", "myYaxis")
+
+
+        // x axis label 
+    svg6.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 450)
+    .attr("y", height + 15)
+    .text("IPC crime");
+        
+// y axis label
+        
+    svg6.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-150)
+    .attr("y", -70)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Total no. of Cases");
+
+
+// A function that create / update the plot for a given variable:
+function update(data,year) {
+
+    //y.domain([0, d3.max(data, function(d) { return d.value }) ]);
+    
+  // Update the X axis
+  x.domain(data.map(function(d) { return d.group; }))
+  xAxis.call(d3.axisBottom(x))
+    .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-45)")
+    .style("text-anchor", "end");
+
+  // Update the Y axis
+  y.domain([0, 340000 ]);
+  yAxis.transition().duration(1000).call(d3.axisLeft(y));
+
+    // getting <li> to update the value of crime dynamically
+    
+    document.getElementById("MURDER").innerText = "";
+    MURDER  = document.getElementById("MURDER");
+    
+    document.getElementById("ATTEMPT TO MURDER").innerText = "";
+    ATTEMPT_TO_MURDER  = document.getElementById("ATTEMPT TO MURDER");
+    
+    document.getElementById("CULPABLE HOMICIDE NOT AMOUNTING TO MURDER").innerText = "";
+    CULPABLE_HOMICIDE_NOT_AMOUNTING_TO_MURDER  = document.getElementById("CULPABLE HOMICIDE NOT AMOUNTING TO MURDER");
+    
+    document.getElementById("RAPE").innerText = "";
+    RAPE  = document.getElementById("RAPE");
+    
+    document.getElementById("CUSTODIAL RAPE").innerText = "";
+    CUSTODIAL_RAPE  = document.getElementById("CUSTODIAL RAPE");
+    
+    document.getElementById("OTHER RAPE").innerText = "";
+    OTHER_RAPE  = document.getElementById("OTHER RAPE");
+    
+    document.getElementById("KIDNAPPING & ABDUCTION").innerText = "";
+    KIDNAPPING_ABDUCTION  = document.getElementById("KIDNAPPING & ABDUCTION");
+    
+    document.getElementById("KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS").innerText = "";
+    KIDNAPPING_AND_ABDUCTION_OF_WOMEN_AND_GIRLS  = document.getElementById("KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS");
+    
+    document.getElementById("KIDNAPPING AND ABDUCTION OF OTHERS").innerText = "";
+    KIDNAPPING_AND_ABDUCTION_OF_OTHERS  = document.getElementById("KIDNAPPING AND ABDUCTION OF OTHERS");
+    
+    document.getElementById("PREPARATION AND ASSEMBLY FOR DACOITY").innerText = "";
+    PREPARATION_AND_ASSEMBLY_FOR_DACOITY  = document.getElementById("PREPARATION AND ASSEMBLY FOR DACOITY");
+    
+    document.getElementById("ROBBERY").innerText = "";
+    ROBBERY  = document.getElementById("ROBBERY");
+    
+     document.getElementById("DACOITY").innerText = "";
+    DACOITY  = document.getElementById("DACOITY");
+    
+    document.getElementById("BURGLARY").innerText = "";
+    BURGLARY  = document.getElementById("BURGLARY");
+    
+    document.getElementById("THEFT").innerText = "";
+    THEFT  = document.getElementById("THEFT");
+    
+    document.getElementById("AUTO THEFT").innerText = "";
+    AUTO_THEFT  = document.getElementById("AUTO THEFT");
+    
+    document.getElementById("OTHER THEFT").innerText = "";
+    OTHER_THEFT  = document.getElementById("OTHER THEFT");
+    
+    document.getElementById("RIOTS").innerText = "";
+    RIOTS  = document.getElementById("RIOTS");
+    
+    document.getElementById("CRIMINAL BREACH OF TRUST").innerText = "";
+    CRIMINAL_BREACH_OF_TRUST  = document.getElementById("CRIMINAL BREACH OF TRUST");
+    
+    document.getElementById("CHEATING").innerText = "";
+    CHEATING  = document.getElementById("CHEATING");
+    
+    document.getElementById("COUNTERFIETING").innerText = "";
+    COUNTERFIETING  = document.getElementById("COUNTERFIETING");
+    
+    document.getElementById("ARSON").innerText = "";
+    ARSON  = document.getElementById("ARSON");
+    
+    document.getElementById("GREVIOUS").innerText = "";
+    GREVIOUS  = document.getElementById("GREVIOUS");
+    
+    document.getElementById("DOWRY DEATHS").innerText = "";
+    DOWRY_DEATHS  = document.getElementById("DOWRY DEATHS");
+    
+    document.getElementById("ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY").innerText = "";
+    ASSAULT_ON_WOMEN_WITH_INTENT_TO_OUTRAGE_HER_MODESTY  = document.getElementById("ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY");
+    
+    document.getElementById("INSULT TO MODESTY OF WOMEN").innerText = "";
+    INSULT_TO_MODESTY_OF_WOMEN  = document.getElementById("INSULT TO MODESTY OF WOMEN");
+    
+    document.getElementById("CRUELTY BY HUSBAND OR HIS RELATIVES").innerText = "";
+    CRUELTY_BY_HUSBAND_OR_HIS_RELATIVES  = document.getElementById("CRUELTY BY HUSBAND OR HIS RELATIVES");
+    
+    document.getElementById("IMPORTATION OF GIRLS FROM FOREIGN COUNTRIES").innerText = "";
+    IMPORTATION_OF_GIRLS_FROM_FOREIGN_COUNTRIES  = document.getElementById("IMPORTATION OF GIRLS FROM FOREIGN COUNTRIES");
+    
+    document.getElementById("CAUSING DEATH BY NEGLIGENCE").innerText = "";
+    CAUSING_DEATH_BY_NEGLIGENCE  = document.getElementById("CAUSING DEATH BY NEGLIGENCE");
+    
+    
+    // to update selected year
+    
+    if(typeof year !== 'undefined')
+    {
+        document.getElementById("selected_year").innerText = "";
+        selected_year  = document.getElementById("selected_year");
+        var year_to_show = document.createTextNode("YEAR : " + year);
+        selected_year.appendChild(year_to_show);
+    }
+    else
+    {
+        document.getElementById("selected_year").innerText = "";
+        selected_year  = document.getElementById("selected_year");
+        var year_to_show = document.createTextNode("YEAR : " + 2001);
+        selected_year.appendChild(year_to_show);
+    }
+    
+/*    console.log(theft_li);
+    console.log(grevious_li);*/
+    
+    //console.log(data);
+    
+    for(i=0;i<data.length;i++){
+        if(data[i].group == "MURDER"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            MURDER.appendChild(text);
+
+        }
+        else if(data[i].group == "ATTEMPT TO MURDER"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            ATTEMPT_TO_MURDER.appendChild(text);    
+        }
+        else if(data[i].group == "CULPABLE HOMICIDE NOT AMOUNTING TO MURDER"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            CULPABLE_HOMICIDE_NOT_AMOUNTING_TO_MURDER.appendChild(text);    
+        }
+        else if(data[i].group == "RAPE"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            RAPE.appendChild(text);    
+        }
+        else if(data[i].group == "CUSTODIAL RAPE"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            CUSTODIAL_RAPE.appendChild(text);    
+        }
+        else if(data[i].group == "OTHER RAPE"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            OTHER_RAPE.appendChild(text);    
+        }
+        else if(data[i].group == "KIDNAPPING & ABDUCTION"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            KIDNAPPING_ABDUCTION.appendChild(text);    
+        }
+        else if(data[i].group == "KIDNAPPING AND ABDUCTION OF WOMEN AND GIRLS"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            KIDNAPPING_AND_ABDUCTION_OF_WOMEN_AND_GIRLS.appendChild(text);    
+        }
+        else if(data[i].group == "KIDNAPPING AND ABDUCTION OF OTHERS"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            KIDNAPPING_AND_ABDUCTION_OF_OTHERS.appendChild(text);    
+        }
+        else if(data[i].group == "DACOITY"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            DACOITY.appendChild(text);    
+        }
+        else if(data[i].group == "PREPARATION AND ASSEMBLY FOR DACOITY"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            PREPARATION_AND_ASSEMBLY_FOR_DACOITY.appendChild(text);    
+        }
+        else if(data[i].group == "ROBBERY"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            ROBBERY.appendChild(text);    
+        }
+        else if(data[i].group == "BURGLARY"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            BURGLARY.appendChild(text);    
+        }
+        else if(data[i].group == "THEFT"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            THEFT.appendChild(text);    
+        }
+        else if(data[i].group == "AUTO THEFT"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            AUTO_THEFT.appendChild(text);    
+        }
+        else if(data[i].group == "OTHER THEFT"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            OTHER_THEFT.appendChild(text);    
+        }
+        else if(data[i].group == "RIOTS"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            RIOTS.appendChild(text);    
+        }
+        else if(data[i].group == "CRIMINAL BREACH OF TRUST"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            CRIMINAL_BREACH_OF_TRUST.appendChild(text);    
+        }
+        else if(data[i].group == "CHEATING"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            CHEATING.appendChild(text);    
+        }
+        else if(data[i].group == "COUNTERFIETING"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            COUNTERFIETING.appendChild(text);    
+        }
+        else if(data[i].group == "ARSON"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            ARSON.appendChild(text);    
+        }
+        else if(data[i].group == "HURT/GREVIOUS HURT"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            GREVIOUS.appendChild(text);    
+        }
+        else if(data[i].group == "DOWRY DEATHS"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            DOWRY_DEATHS.appendChild(text);    
+        }
+        else if(data[i].group == "ASSAULT ON WOMEN WITH INTENT TO OUTRAGE HER MODESTY"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            ASSAULT_ON_WOMEN_WITH_INTENT_TO_OUTRAGE_HER_MODESTY.appendChild(text);    
+        }
+        else if(data[i].group == "INSULT TO MODESTY OF WOMEN"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            INSULT_TO_MODESTY_OF_WOMEN.appendChild(text);    
+        }
+        else if(data[i].group == "CRUELTY BY HUSBAND OR HIS RELATIVES"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            CRUELTY_BY_HUSBAND_OR_HIS_RELATIVES.appendChild(text);    
+        }
+        else if(data[i].group == "IMPORTATION OF GIRLS FROM FOREIGN COUNTRIES"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            IMPORTATION_OF_GIRLS_FROM_FOREIGN_COUNTRIES.appendChild(text);    
+        }
+        else if(data[i].group == "CAUSING DEATH BY NEGLIGENCE"){
+            data_to_show_value =  data[i].value;
+            data_to_show_group =  data[i].group;
+
+            var text = document.createTextNode(data_to_show_group + " : " + data_to_show_value);
+            CAUSING_DEATH_BY_NEGLIGENCE.appendChild(text);    
+        }
+        
+        
+    }
+    
+    
+  // Create the u variable
+  var u = svg6.selectAll("rect")
+    .data(data)
+    .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);
+
+            //console.log(d);
+
+            div	.html(d.group + " : " + d.value)	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+        
+            svg6.selectAll("rect").attr("opacity",0.2);
+        
+            d3.select(this).attr("opacity",1);
+            d3.select(this).attr("fill",'red');    
+        
+        })					
+     .on("mouseout", function(d) {		
+        div.transition()		
+            .duration(500)		
+            .style("opacity", 0);	
+         
+            svg6.selectAll("rect").attr("opacity",1);
+    
+            d3.select(this).attr("fill",'black');
+
+            if (d.group == "HURT/GREVIOUS HURT")
+            {
+                d3.select(this).attr("fill",'red');
+
+            }
+         
+    });
+
+  u
+    .enter()
+    .append("rect") // Add a new rect for each new elements
+    .merge(u) // get the already existing elements as well
+    .transition() // and apply changes to all of them
+    .duration(1000)
+      .attr("x", function(d) { return x(d.group); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d.value); })
+      .attr("fill", function(d){
+                    if (d.group == "HURT/GREVIOUS HURT"){return 'red';}})
+
+  // If less group in the new dataset, I delete the ones not in use anymore
+  u
+    .exit()
+    .remove()
+}
+
+// ----------------------- bubble chart -------------------------------------
+        
+        // set the dimensions and margins of the graph
+var margin7 = {top: 10, right: 20, bottom: 30, left: 50},
+    width7 = 500 - margin.left - margin.right,
+    height7 = 420 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg7 = d3.select("#my_dataviz7")
+  .append("svg")
+    .attr("width", width + margin7.left + margin7.right)
+    .attr("height", height + 50 + margin7.top + margin7.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin7.left + "," + margin7.top + ")");
+        
+
+// x axis label - % poverty
+    svg7.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 250)
+    .attr("y", height + 50)
+    .text("% Poverty");
+        
+// y axis label - literacy
+        
+    svg7.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-150)
+    .attr("y", -50)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("% Literacy");
+        
+
+        //Read the data
+d3.csv("file_for_bubble_chart_2011.csv", function(data) {
+
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 60])
+    .range([ 0, width ]);
+  svg7.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([55, 100])
+    .range([ height, 0]);
+    
+  svg7.append("g")
+    .call(d3.axisLeft(y));
+
+  // Add a scale for bubble size
+  var z = d3.scaleLinear()
+    .domain([0, 450000])
+    .range([ 1, 40]);
+
+  // Add dots
+  svg7.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return x(d.per_poverty); } )
+      .attr("cy", function (d) { return y(d.per_literacy); } )
+      .attr("r", function (d) { return z(d.total_crime); } )
+      .style("fill", function(d){
+                    if (d.total_crime == 434188){return 'red';}})
+      .style("opacity", "0.7")
+      .attr("stroke", "black")
+      .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);
+
+            console.log(d);
+
+            div	.html("State : " + d.state_ut + "<br>Poverty : " + d.per_poverty + "%" + "<br>" + "Literacy : " + d.per_literacy + "%" + "<br>" + "Cases : " + d.total_crime)	
+                .style("left", (d3.event.pageX + 20) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+      
+      
+            svg7.selectAll("circle").attr("opacity",0.2);
+        
+            d3.select(this).attr("opacity",1);
+            d3.select(this).attr("fill",'red');
+        })					
+     .on("mouseout", function(d) {		
+        div.transition()		
+            .duration(500)		
+            .style("opacity", 0);	
+      
+      svg7.selectAll("circle").attr("opacity",1);
+    
+      d3.select(this).attr("fill",'black');
+      
+    });
+      
+})
+        
+    // --------------- Line graph - dropdown - state selection ------------------
+        
+        // set the dimensions and margins of the graph
+var margin9 = {top: 10, right: 100, bottom: 30, left: 70},
+    width9 = 600 - margin9.left - margin9.right,
+    height9 = 450 - margin9.top - margin9.bottom;
+        
+        // append the svg object to the body of the page
+var svg9 = d3.select("#my_dataviz9")
+            .append("svg")
+            .attr("width", width9 + margin9.left + margin9.right)
+            .attr("height", height9 + margin9.top + margin9.bottom+5)
+        .attr("transform",
+          "translate(" + 50 + "," + margin9.top + ")")
+        .append("g")
+            .attr("transform","translate(" + margin9.left + "," + margin9.top + ")");
+        
+        
+//Read the data
+d3.csv("data_for_dropdown_line_chart_state_selection.csv", function(data) {
+
+    // List of groups (here I have one group per column)
+
+    var allGroup = ['A & N ISLANDS', 'ANDHRA PRADESH', 'ARUNACHAL PRADESH', 'ASSAM',
+       'BIHAR', 'CHANDIGARH', 'CHHATTISGARH', 'D & N HAVELI', 'DAMAN & DIU',
+       'DELHI UT', 'GOA', 'GUJARAT', 'HARYANA', 'HIMACHAL PRADESH',
+       'JAMMU & KASHMIR', 'JHARKHAND', 'KARNATAKA', 'KERALA', 'LAKSHADWEEP',
+       'MADHYA PRADESH', 'MAHARASHTRA', 'MANIPUR', 'MEGHALAYA', 'MIZORAM',
+       'NAGALAND', 'ODISHA', 'PUDUCHERRY', 'PUNJAB', 'RAJASTHAN', 'SIKKIM',
+       'TAMIL NADU', 'TRIPURA', 'UTTAR PRADESH', 'UTTARAKHAND', 'WEST BENGAL']
+    
+    // add the options to the button
+    d3.select("#selectButton9")
+      .selectAll('myOptions')
+     	.data(allGroup)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    // A color scale: one color for each group
+    var myColor = d3.scaleOrdinal()
+      .domain(allGroup)
+      .range(d3.schemeSet2);
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleLinear()
+      .domain([2001,2012])
+      .range([ 0, width9 ]);
+    svg9.append("g")
+      .attr("transform", "translate(0," + height9 + ")")
+      .call(d3.axisBottom(x));
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+          .domain( [60000,200000])
+          .range([ height9, 0 ]);
+        svg9.append("g")
+        .attr("class","y axis")
+          .call(d3.axisLeft(y));
+    
+     // x axis label
+    svg9.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 240)
+    .attr("y", height + 92)
+    .text("Year");
+        
+// y axis label
+        
+    svg9.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-130)
+    .attr("y", -65)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Total no. of Cases");
+
+    // Initialize line with group a
+    var line = svg9
+      .append('g')
+      .append("path")
+        .datum(data)
+        .attr("d", d3.line()
+          .x(function(d) { return x(+d.time) })
+          .y(function(d) { return y(+d.ASSAM) })
+        )
+        .attr("stroke", "red" )
+        .style("stroke-width", 4)
+        .style("fill", "none");
+
+    // A function that update the chart
+    function update9(selectedGroup) {
+
+      // Create new data with the selection?
+      var dataFilter = data.map(function(d){return {time: d.time, value:d[selectedGroup]} })
+      
+      
+      var domainOfSelectedCrime = data.map(function(d){return d[selectedGroup] })
+
+      var maxDomainOfSelectedCrime = Math.max.apply(Math,domainOfSelectedCrime)
+      var minDomainOfSelectedCrime = Math.min.apply(Math,domainOfSelectedCrime)
+      
+      //console.log(maxDomainOfSelectedCrime);
+        
+    //console.log(maxDomainOfSelectedCrime);
+      
+      svg9.selectAll(".y.axis").remove();
+      
+      
+      // Add Y axis
+        var y = d3.scaleLinear()
+          .domain( [minDomainOfSelectedCrime - 1000, maxDomainOfSelectedCrime + 1000])
+          .range([ height9, 0 ]);
+        svg9.append("g")
+        .attr("class","y axis")
+          .call(d3.axisLeft(y));
+      
+      
+      // Give these new data to update line
+      line
+          .datum(dataFilter)
+          .transition()
+          .duration(1000)
+          .attr("d", d3.line()
+            .x(function(d) { return x(+d.time) })
+            .y(function(d) { return y(+d.value) })
+          )
+          .attr("stroke", "red")
+        
+        svg9.selectAll("path")
+        .datum(dataFilter)
+        .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);
+
+            console.log(data);
+
+            div	.html(selectedGroup)	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+        })					
+         .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+        
+    }
+
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton9").on("change", function(d) {
+        
+        
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update9(selectedOption)
+    })
+
+})
+        
+// ----------------- scatter for 2011 ---------------------
+
+        
+        // set the dimensions and margins of the graph
+var margin11 = {top: 50, right: 30, bottom: 40, left: 70},
+    width11 = (screen.width/2) - 80  - margin11.left - margin11.right,
+    height11 = (screen.height/2) + 30 - margin11.top - margin11.bottom;
+
+// append the svg object to the body of the page
+var svg11 = d3.select("#my_dataviz11")
+  .append("svg")
+    .attr("width", width11 + margin11.left + margin11.right + 10)
+    .attr("height", height11 + margin11.top + margin11.bottom + 20)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin11.left + "," + margin11.top + ")");
+
+    
+//Read the data
+d3.csv("crime_pop_2011_merged_inner.csv", function(data) {
+
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0,36000])
+    .range([ 0, width11 ]);
+  svg11.append("g")
+    .attr("transform", "translate(0," + height11 + ")")
+    .call(d3.axisBottom(x))
+    .selectAll("text")
+    .attr("transform", "translate(-20,15)rotate(-45)");
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 1500])
+    .range([ height11, 0]);
+  svg11.append("g")
+    .call(d3.axisLeft(y));
+    
+    // x axis label 
+    svg11.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 350)
+    .attr("y", height11 + 55)
+    .text("Total no. of Cases in 2011");
+        
+// y axis label
+        
+    svg11.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x",-130)
+    .attr("y", -70)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Crime rate");
+
+    
+
+  // Color scale: give me a specie name, I return a color
+  var color = d3.scaleOrdinal()
+    .domain(['ANDAMAN AND NICOBAR ISLANDS', 'ANDHRA PRADESH', 'ARUNACHAL PRADESH',
+ 'ASSAM', 'BIHAR', 'CHANDIGARH', 'CHHATTISGARH', 'DADRA AND NAGAR HAVELI',
+ 'DAMAN AND DIU', 'DELHI UT', 'GOA', 'GUJARAT', 'HARYANA', 'HIMACHAL PRADESH',
+ 'JAMMU AND KASHMIR', 'JHARKHAND', 'KARNATAKA', 'KERALA', 'LAKSHADWEEP',
+ 'MADHYA PRADESH', 'MAHARASHTRA', 'MANIPUR', 'MEGHALAYA', 'MIZORAM', 'NAGALAND',
+ 'ORISSA', 'PONDICHERRY', 'PUNJAB', 'RAJASTHAN', 'SIKKIM', 'TAMIL NADU',
+ 'TRIPURA', 'UTTAR PRADESH', 'UTTARAKHAND', 'WEST BENGAL'])
+    .range([ '#FFA07A' , '#FA8072' , '#E9967A' , '#F08080' , '#CD5C5C' , '#DC143C' , '#B22222' , '#FF0000' , '#8B0000' , '#800000',
+             '#FF6347' , '#FF4500' , '#DB7093' , '#000000' , '#696969' , '#808080' , '#A9A9A9' , '#C0C0C0' , '#ffbaba' , '#ff7b7b',
+             '#400000' , '#1a0000' , '#330000' , '#4d0000' , '#660000' , '#800000' , '#990000' , '#b30000' , '#cc0000' , '#e60000',
+             '#ff5252' , '#ff0000' , '#a70000' , '#bf0000' , '#800000'
+           ])
+
+  // Add dots
+  svg11.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return x(d.CASES); } )
+      .attr("cy", function (d) { return y(d.CRIME_RATE); } )
+      .attr("r", 5)
+      .style("fill", function (d) { return color(d.STATE_UT_x) } )
+        .on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);
+
+            div	.html("STATE : " + d.STATE_UT_x + " <br> " + "DISTRICT : " + d.DISTRICT + " <br> " + "CASES : " + d.CASES + " <br> POPULATION : " + d.POPULATION + " <br> CRIME RATE : " + d.CRIME_RATE)	
+                .style("left", (d3.event.pageX + 10) + "px")		
+                .style("top", (d3.event.pageY - 50) + "px");
+
+            svg11.selectAll("circle").attr("opacity",0.2);
+
+            d3.select(this).attr("opacity",1);
+            d3.select(this).attr("fill",'red');
+
+            })					
+            .on("mouseout", function(d) {		
+                div.transition()		
+                    .duration(500)		
+                    .style("opacity", 0);
+
+                svg11.selectAll("circle").attr("opacity",1);
+
+                d3.select(this).attr("fill",'black');
+
+
+        });
+
+})
+        
+	</script>
+    
+</body>
+            <!-- Footer -->
+    <footer class="page-footer font-small blue" style="background: black; color:azure; padding:10px; font-size: 10px">
+
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-3">Author : Prashant Jajoria - 31187366<br>
+        <p>Email : 
+        <a href="mailto:pjaj0001@student.monash.edu">pjaj0001@student.monash.edu</a></p>
+      </div>
+      <!-- Copyright -->
+
+    </footer>
+    <!-- Footer -->
+
+</html>
